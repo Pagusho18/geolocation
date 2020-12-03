@@ -54,6 +54,28 @@ const App = () => {
     }
   };
 
+  const getDirectionsCar = () => {
+    if (waypoints.length >= 2) {
+      directionsClient
+        .getDirections({
+          profile: 'driving',
+          waypoints,
+          geometries: 'geojson',
+        })
+        .send()
+        .then(response => {
+          setDirections(response.body.routes[0].geometry.coordinates);
+        })
+        .catch(error =>
+          alert(
+            'Asegurate que los marcadores se encuentran en una dirección válida',
+          ),
+        );
+    }
+  };
+
+
+
   const route = {
     type: 'FeatureCollection',
     features: [
@@ -129,11 +151,17 @@ const App = () => {
         </MapboxGL.MapView>
 
         <TouchableOpacity style={styles.button} onPress={getDirections}>
-          <Text style={styles.text}>Direcciones</Text>
+          <Text style={styles.text}>Ir en bici</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{...styles.button, backgroundColor: '#81020E'}}
+          style={{...styles.button, backgroundColor: '#0414f8'}}
+          onPress={getDirectionsCar}>
+          <Text style={styles.text}>Ir en carro</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{...styles.button, backgroundColor: '#86fc23'}}
           onPress={reset}>
           <Text style={styles.text}>Reset</Text>
         </TouchableOpacity>
